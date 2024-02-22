@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .container { max-width: 800px; }
+        .hidden { display: none; }
+        .locked-input { background-color: #e9ecef; }
+        .info-text { margin-bottom: 15px; font-style: italic; }
+        .info-modal .modal-body { font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Submit File</h2>
+    <form enctype="multipart/form-data" method="POST" action="/submit">
+        <div class="form-group">
+            <label for="optionSelection">Select Option</label>
+            <select class="form-control" id="optionSelection">
+              
+                    <option value="Image">Image</option>
+                    <option value="MSRP">MSRP</option>
+                    <option value="Image & MSRP (Lite)" disabled>Image & MSRP (Lite)</option>
+                    <option value="Image & MSRP (Pro)" disabled>Image & MSRP (Pro)</option>
+           
+                
+            </select>
+            <div class="info-text" id="optionInfo"></div>
+        </div>
+
+        <!-- Image Fields Section (Hidden initially) -->
+        <div id="imageFields" class="hidden">
+            <p class="info-text"></p>
+            <div class="form-group">
+                <label for="fileUploadImage">Upload File</label>
+                <input type="file" class="form-control-file" name="fileUploadImage" id="fileUploadImage" accept=".xlsx" >
+            </div>
+            <div class="form-group">
+                <label for="searchColImage">SKU Column *</label>
+                <input type="text" class="form-control" id="searchColImage" name="searchColImage" >
+            </div>
+            <div class="form-group">
+                <label for="brandColImage">Brand Column</label>
+                <input type="text" class="form-control" id="brandColImage" name="brandColImage" >
+            </div>
+            <div class="form-group">
+                <label for="imageColumnImage">Image Column *</label>
+                <input type="text" class="form-control" id="imageColumnImage" name="imageColumnImage" value="A">
+            </div>
+            <div class="form-group">
+                <label>Preferred Image Method *</label>
+                <div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredImageMethod" id="append" value="append" checked>
+                        <label class="form-check-label" for="append">
+                            Append (Skip Existing)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Add new images to existing ones without replacing any."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredImageMethod" id="overwrite" value="overwrite">
+                        <label class="form-check-label" for="overwrite">
+                            Overwrite
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Replace existing images with new ones."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredImageMethod" id="newColumn" value="newColumn">
+                        <label class="form-check-label" for="newColumn">
+                            Make New Column (To the Left)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Create a new column for images to the left of existing ones."></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MSRP Fields Section (Hidden initially) -->
+        <div id="msrpFields" class="hidden">
+            <div class="form-group">
+                <label for="fileUploadMsrp">Upload File</label>
+                <input type="file" class="form-control-file" name="fileUploadMsrp" id="fileUploadMsrp" accept=".xlsx" >
+            </div>
+            <div class="form-group">
+                <label for="searchColMsrp">SKU Column *</label>
+                <input type="text" class="form-control" id="searchColMsrp" name="searchColMsrp" >
+            </div>
+        
+            <div class="form-group">
+                <label for="brandColMsrp">Brand Column *</label>
+                <input type="text" class="form-control" id="brandColMsrp" name="brandColMsrp" >
+            </div>
+            <div class="form-group">
+                <label for="msrpColumnMsrp">MSRP Column *</label>
+                <input type="text" class="form-control" id="msrpColumnMsrp" name="msrpColumnMsrp" value="R">
+            </div>
+            <div class="form-group">
+                <label>Preferred MSRP Method *</label>
+                <div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpAppend" value="append" checked>
+                        <label class="form-check-label" for="msrpAppend">
+                            Append (Skip Existing)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Add new MSRP data to existing ones without replacing any."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpOverwrite" value="overwrite">
+                        <label class="form-check-label" for="msrpOverwrite">
+                            Overwrite
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Replace existing MSRP data with new ones."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpNewColumn" value="newColumn">
+                        <label class="form-check-label" for="msrpNewColumn">
+                            Make New Column (To the Left)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Create a new column for MSRP data to the left of existing ones."></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <!-- Info Modal (Defined Once) -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel">Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                        <p><strong>Brand Support:</strong><br>Gucci, Alexander McQueen, Saint Laurent, Bottega Veneta, Burberry, Balenciaga, Givenchy, Chloe, Loewe, Veja, Fendi, Versace, Balmain, Jacquemus, Ferragamo</p>
+                        <p><strong>Under Maintenance:</strong><br>Moncler (JS render issue), Dolce & Gabbana (JS render issue), Marc Jacobs</p>
+                        <p><strong>Coming Soon:</strong><br>Vans</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <button type="submit" class="btn btn-primary" disabled>Submit</button>
+    </form>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

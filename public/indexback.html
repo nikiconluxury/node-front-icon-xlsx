@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Submit Task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .container { max-width: 800px; }
+        .hidden { display: none; }
+        .locked-input { background-color: #e9ecef; }
+        .info-text { margin-bottom: 15px; font-style: italic; }
+        .info-modal .modal-body { font-size: 14px; }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Submit File</h2>
+    <form enctype="multipart/form-data" method="POST" action="/submit">
+        <div class="form-group">
+            <label for="optionSelection">Select Option</label>
+            <select class="form-control" id="optionSelection">
+                <option value="Image">Image</option>
+                <option value="MSRP">MSRP</option>
+                <option value="BothLite">Both (Lite)</option>
+                <option value="BothPro">Both (Pro) - Coming Soon</option>
+            </select>
+            <div class="info-text" id="optionInfo"></div>
+        </div>
+
+        <!-- Image Fields Section (Hidden initially) -->
+        <div id="imageFields" class="hidden">
+            <p class="info-text"></p>
+            <div class="form-group">
+                <label for="fileUploadImage">Upload File</label>
+                <input type="file" class="form-control-file" name="fileUploadImage" id="fileUploadImage" accept=".xlsx" >
+            </div>
+            <div class="form-group">
+                <label for="searchColImage">SKU Column *</label>
+                <input type="text" class="form-control" id="searchColImage" name="searchColImage" >
+            </div>
+            <div class="form-group">
+                <label for="brandColImage">Brand Column</label>
+                <input type="text" class="form-control" id="brandColImage" name="brandColImage" >
+            </div>
+            <div class="form-group">
+                <label for="imageColumnImage">Image Column *</label>
+                <input type="text" class="form-control" id="imageColumnImage" name="imageColumnImage" value="A">
+            </div>
+            <div class="form-group">
+                <label>Preferred Image Method *</label>
+                <div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredImageMethod" id="append" value="append" checked>
+                        <label class="form-check-label" for="append">
+                            Append (Skip Existing)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Add new images to existing ones without replacing any."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredImageMethod" id="overwrite" value="overwrite">
+                        <label class="form-check-label" for="overwrite">
+                            Overwrite
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Replace existing images with new ones."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredImageMethod" id="newColumn" value="newColumn">
+                        <label class="form-check-label" for="newColumn">
+                            Make New Column (To the Left)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Create a new column for images to the left of existing ones."></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MSRP Fields Section (Hidden initially) -->
+        <div id="msrpFields" class="hidden">
+            <div class="form-group">
+                <label for="fileUploadMsrp">Upload File</label>
+                <input type="file" class="form-control-file" name="fileUploadMsrp" id="fileUploadMsrp" accept=".xlsx" >
+            </div>
+            <div class="form-group">
+                <label for="searchColMsrp">SKU Column *</label>
+                <input type="text" class="form-control" id="searchColMsrp" name="searchColMsrp" >
+            </div>
+        
+            <div class="form-group">
+                <label for="brandColMsrp">Brand Column *</label>
+                <input type="text" class="form-control" id="brandColMsrp" name="brandColMsrp" >
+            </div>
+            <div class="form-group">
+                <label for="msrpColumnMsrp">MSRP Column *</label>
+                <input type="text" class="form-control" id="msrpColumnMsrp" name="msrpColumnMsrp" value="Q">
+            </div>
+            <div class="form-group">
+                <label>Preferred MSRP Method *</label>
+                <div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpAppend" value="append" checked>
+                        <label class="form-check-label" for="msrpAppend">
+                            Append (Skip Existing)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Add new MSRP data to existing ones without replacing any."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpOverwrite" value="overwrite">
+                        <label class="form-check-label" for="msrpOverwrite">
+                            Overwrite
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Replace existing MSRP data with new ones."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpNewColumn" value="newColumn">
+                        <label class="form-check-label" for="msrpNewColumn">
+                            Make New Column (To the Left)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Create a new column for MSRP data to the left of existing ones."></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--<div id="bothLiteFields" class="hidden">
+            <div class="form-group">
+                <label for="fileUpload">Upload File</label>
+                <input type="file" class="form-control-file" name="fileUpload"id="fileUpload" accept=".xlsx" required>
+            </div>
+            <div class="form-group">
+                <label for="skuMsrp">SKU Column *</label>
+                <input type="text" class="form-control" id="skuMsrp" required>
+            </div>
+            <div class="form-group">
+                <label for="brandMsrp">Brand Column *</label>
+                <input type="text" class="form-control" id="brandMsrp" required>
+            </div>
+            <div class="form-group">
+                <label for="msrpColumn">MSRP Column *</label>
+                <input type="text" class="form-control" id="msrpColumn" value="Q">
+            </div>
+            <div class="form-group">
+                <label for="imageColumn">Image Column *</label>
+                <input type="text" class="form-control" id="imageColumn" value="A">
+            </div>
+            <div class="form-group">
+                <label>Preferred MSRP & Image Method *</label>
+                <div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpimageAppend" value="append" checked>
+                        <label class="form-check-label" for="msrpimageAppend">
+                            Append (Skip Existing)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Add new MSRP data to existing ones without replacing any."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpOverwrite" value="overwrite">
+                        <label class="form-check-label" for="msrpOverwrite">
+                            Overwrite
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Replace existing MSRP data with new ones."></i>
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpNewColumn" value="newColumn">
+                        <label class="form-check-label" for="msrpNewColumn">
+                            Make New Column (To the Left)
+                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Create a new column for MSRP data to the left of existing ones."></i>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="bothProFields" class="hidden">
+            <p class="info-text">This option allows you to specify different attachment options for images and msrps.<br><br> Ex. Append Images, Make New Column MSRP...</p>
+            <div class="form-group">
+                <label for="fileUpload">Upload File</label>
+                <input type="file" class="form-control-file" name="fileUpload" id="fileUpload" accept=".xlsx" required>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Image Options</th>
+                        <th scope="col">MSRP Options</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control locked-input" placeholder="SKU Column *" disabled>
+                            <input type="text" class="form-control locked-input" placeholder="Brand Column" disabled>
+                            <input type="text" class="form-control locked-input" value="A" placeholder="Image Column *" disabled>
+                            <select class="form-control mt-2">
+                                <option>Append</option>
+                                <option>Overwrite</option>
+                                <option>Make New Column</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control locked-input" placeholder="SKU Column *" disabled>
+                            <input type="text" class="form-control locked-input" placeholder="Brand Column *" disabled>
+                            <input type="text" class="form-control locked-input" value="Q" placeholder="MSRP Column *" disabled>
+                            <select class="form-control mt-2">
+                                <option>Append</option>
+                                <option>Overwrite</option>
+                                <option>Make New Column</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>-->
+
+    <!-- Info Modal (Defined Once) -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="infoModalLabel">Information</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                        <p><strong>Brand Support:</strong><br>Gucci, Alexander McQueen, Saint Laurent, Bottega Veneta, Burberry, Balenciaga, Givenchy, Chloe, Loewe, Veja, Fendi, Versace, Balmain, Jacquemus, Ferragamo</p>
+                        <p><strong>Under Maintenance:</strong><br>Moncler (JS render issue), Dolce & Gabbana (JS render issue), Marc Jacobs</p>
+                        <p><strong>Coming Soon:</strong><br>Vans</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" disabled>Submit</button>
+    </form>
+</div>
+
+<script>
+$(document).ready(function() {
+    // Remove any existing modal trigger button and close any existing modal
+    $('#modalTriggerBtn').remove();
+    $('.modal').modal('hide');
+
+    // Function to add modal trigger button
+    const addModalTriggerBtn = () => {
+        const btnHtml = '<button type="button" class="btn btn-info btn-sm mt-2" id="modalTriggerBtn" data-toggle="modal" data-target="#infoModal">MSRP Brand Support & Maintenance Info</button>';
+        $(btnHtml).insertAfter('#optionInfo');
+    };
+
+    // Function to update the required attributes based on the visibility of sections
+    function updateRequiredAttributes() {
+        // For image fields
+        $('#imageFields input, #imageFields select').prop('required', $('#imageFields').is(':visible'));
+
+        // For MSRP fields
+        $('#msrpFields input, #msrpFields select').prop('required', $('#msrpFields').is(':visible'));
+
+        // Clear required attributes for input fields in the "Image" section when it's hidden
+        $('#imageFields:hidden input, #imageFields:hidden select').prop('required', false);
+
+        // Clear required attributes for input fields in the "MSRP" section when it's hidden
+        $('#msrpFields:hidden input, #msrpFields:hidden select').prop('required', false);
+    }
+
+    $('#optionSelection').change(function() {
+        // Hide all sections first
+        $('.hidden').hide();
+
+        // Clear previous option info
+        $('#optionInfo').text('');
+
+        const selectedOption = $(this).val();
+        switch (selectedOption) {
+            case 'Image':
+                $('#imageFields').show();
+                // Remove modal trigger button and close modal
+                $('#modalTriggerBtn').remove();
+                $('.modal').modal('hide');
+                break;
+            case 'MSRP':
+                $('#msrpFields').show();
+                addModalTriggerBtn(); // Add modal trigger button
+                break;
+            case 'BothLite':
+                $('#modalTriggerBtn').remove();
+                break;
+            case 'BothPro':
+                $('#modalTriggerBtn').remove();
+                break;
+        }
+
+        // Dynamically update required attributes based on what is currently visible
+        updateRequiredAttributes();
+
+        // Dynamically enable the submit button
+        $('button[type="submit"]').prop('disabled', false);
+    });
+
+    // Initial trigger to set up the form correctly on page load
+    $('#optionSelection').change();
+});
+
+</script>
+</body>
+</html>
