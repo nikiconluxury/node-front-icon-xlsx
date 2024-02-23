@@ -1,16 +1,14 @@
-html {
-    font-family: sans-serif;
-    line-height: 1.5;
-    color: #333;
-  }
-  
-  body {
-    margin: 0 auto;
-    max-width: 500px;
-  }
-  
-  label,
-  input {
-    display: block;
-    margin: 5px 0;
-  }
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+} 
+
+.offcanvas-header, .offcanvas-body {
+  background-color: #212529; 
+  color: #ffffff;
+}
+.toast-icon {
+  width: 24px; /* Example size */
+  margin-right: 10px;
+}

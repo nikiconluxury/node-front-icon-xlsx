@@ -2,159 +2,80 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Submit Task</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <style>
-        .container { max-width: 800px; }
-        .hidden { display: none; }
-        .locked-input { background-color: #e9ecef; }
-        .info-text { margin-bottom: 15px; font-style: italic; }
-        .info-modal .modal-body { font-size: 14px; }
-    </style>
+    <title>Dashboard</title>
+    <link href="styles.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="mb-4">Submit File</h2>
-    <form enctype="multipart/form-data" method="POST" action="/submit">
-        <div class="form-group">
-            <label for="optionSelection">Select Option</label>
-            <select class="form-control" id="optionSelection">
-              
-                    <option value="Image">Image</option>
-                    <option value="MSRP">MSRP</option>
-                    <option value="Image & MSRP (Lite)" disabled>Image & MSRP (Lite)</option>
-                    <option value="Image & MSRP (Pro)" disabled>Image & MSRP (Pro)</option>
-           
-                
-            </select>
-            <div class="info-text" id="optionInfo"></div>
-        </div>
-
-        <!-- Image Fields Section (Hidden initially) -->
-        <div id="imageFields" class="hidden">
-            <p class="info-text"></p>
-            <div class="form-group">
-                <label for="fileUploadImage">Upload File</label>
-                <input type="file" class="form-control-file" name="fileUploadImage" id="fileUploadImage" accept=".xlsx" >
-            </div>
-            <div class="form-group">
-                <label for="searchColImage">SKU Column *</label>
-                <input type="text" class="form-control" id="searchColImage" name="searchColImage" >
-            </div>
-            <div class="form-group">
-                <label for="brandColImage">Brand Column</label>
-                <input type="text" class="form-control" id="brandColImage" name="brandColImage" >
-            </div>
-            <div class="form-group">
-                <label for="imageColumnImage">Image Column *</label>
-                <input type="text" class="form-control" id="imageColumnImage" name="imageColumnImage" value="A">
-            </div>
-            <div class="form-group">
-                <label>Preferred Image Method *</label>
-                <div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="preferredImageMethod" id="append" value="append" checked>
-                        <label class="form-check-label" for="append">
-                            Append (Skip Existing)
-                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Add new images to existing ones without replacing any."></i>
-                        </label>
+    
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Home</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="preferredImageMethod" id="overwrite" value="overwrite">
-                        <label class="form-check-label" for="overwrite">
-                            Overwrite
-                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Replace existing images with new ones."></i>
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="preferredImageMethod" id="newColumn" value="newColumn">
-                        <label class="form-check-label" for="newColumn">
-                            Make New Column (To the Left)
-                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Create a new column for images to the left of existing ones."></i>
-                        </label>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="index.html">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="image.html">Image Task</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="msrp.html">MSRP Task</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- MSRP Fields Section (Hidden initially) -->
-        <div id="msrpFields" class="hidden">
-            <div class="form-group">
-                <label for="fileUploadMsrp">Upload File</label>
-                <input type="file" class="form-control-file" name="fileUploadMsrp" id="fileUploadMsrp" accept=".xlsx" >
+        </nav>
+    </header>
+    <main class="container mt-5 bg-light p-5 rounded">
+        <h2 class="mb-4">Tasks</h2>
+      
+            <div class="row g-4">
+                <!-- MSRP Card -->
+                <div class="col-md-6">
+                    <div class="card">
+                    <!--   <img src="image.svg" class="card-img-top" alt="MSRP Task">-->
+                        <div class="card-body">
+                            <h5 class="card-title">MSRP Task</h5>
+                            <p class="card-text">Details about the MSRP task...</p>
+                            <a href="msrp.html" class="btn btn-primary">Go to MSRP Task</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Image Task Card -->
+                <div class="col-md-6">
+                    <div class="card">
+                   <!--  <img src="dollar-sign.svg" class="card-img-top" alt="Image Task">-->
+                        <div class="card-body">
+                            <h5 class="card-title">Image Task</h5>
+                            <p class="card-text">Details about the Image task...</p>
+                            <a href="image.html" class="btn btn-primary">Go to Image Task</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="searchColMsrp">SKU Column *</label>
-                <input type="text" class="form-control" id="searchColMsrp" name="searchColMsrp" >
-            </div>
+        </main>
         
-            <div class="form-group">
-                <label for="brandColMsrp">Brand Column *</label>
-                <input type="text" class="form-control" id="brandColMsrp" name="brandColMsrp" >
-            </div>
-            <div class="form-group">
-                <label for="msrpColumnMsrp">MSRP Column *</label>
-                <input type="text" class="form-control" id="msrpColumnMsrp" name="msrpColumnMsrp" value="R">
-            </div>
-            <div class="form-group">
-                <label>Preferred MSRP Method *</label>
-                <div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpAppend" value="append" checked>
-                        <label class="form-check-label" for="msrpAppend">
-                            Append (Skip Existing)
-                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Add new MSRP data to existing ones without replacing any."></i>
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpOverwrite" value="overwrite">
-                        <label class="form-check-label" for="msrpOverwrite">
-                            Overwrite
-                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Replace existing MSRP data with new ones."></i>
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpNewColumn" value="newColumn">
-                        <label class="form-check-label" for="msrpNewColumn">
-                            Make New Column (To the Left)
-                            <i class="fas fa-info-circle" data-toggle="tooltip" data-placement="top" title="Create a new column for MSRP data to the left of existing ones."></i>
-                        </label>
-                    </div>
-                </div>
-            </div>
+    <footer class="footer mt-auto py-3 bg-dark">
+        <div class="container text-center">
+            <span class="text-white">© 2024 Icon Luxury Group</span>
         </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 
-
-    <!-- Info Modal (Defined Once) -->
-    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="infoModalLabel">Information</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                    <div class="modal-body">
-                        <p><strong>Brand Support:</strong><br>Gucci, Alexander McQueen, Saint Laurent, Bottega Veneta, Burberry, Balenciaga, Givenchy, Chloe, Loewe, Veja, Fendi, Versace, Balmain, Jacquemus, Ferragamo</p>
-                        <p><strong>Under Maintenance:</strong><br>Moncler (JS render issue), Dolce & Gabbana (JS render issue), Marc Jacobs</p>
-                        <p><strong>Coming Soon:</strong><br>Vans</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        <button type="submit" class="btn btn-primary" disabled>Submit</button>
-    </form>
-</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
