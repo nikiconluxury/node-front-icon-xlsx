@@ -1,6 +1,6 @@
-# Use the official Node.js 14 image.
+# Use the official Node.js 18 image.
 # https://hub.docker.com/_/node
-FROM node:14-slim
+FROM node:18-slim
 
 # Create and change to the app directory.
 WORKDIR /usr/src/app
@@ -11,10 +11,14 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install production dependencies.
-RUN npm install --only=production
+# Consider using `npm ci` which is more suitable for production builds as it installs directly from package-lock.json
+RUN npm ci --only=production
 
 # Copy local code to the container image.
 COPY . .
+
+# Expose the port your app runs on
+EXPOSE 3000
 
 # Run the web service on container startup.
 CMD [ "node", "server.js" ]
