@@ -22,6 +22,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+
+
+
+
 // Converts Excel column letters to a zero-based index for easier data manipulation
 function columnLetterToIndex(columnLetter) {
     let column = 0;
