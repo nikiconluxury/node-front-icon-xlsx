@@ -103,7 +103,7 @@ app.post('/submitMsrp', upload.single('fileUploadMsrp'), async (req, res) => {
         }
 
         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const headerKeywords = ["BRAND", "COLOR", "MSRP", "QTY", "IMAGE", "PICTURE", "MODEL", "MATERIAL", "SKU", "PRICE", "SIZE","DESCRIPTION","DESIGNER","MATERIAL","COLOUR","TITLE", "ROW LABELS", "GRAND TOTAL"];
+        const headerKeywords = ["BRAND", "COLOR", "MSRP", "QTY", "IMAGE", "PICTURE", "MODEL", "MATERIAL", "SKU", "PRICE", "SIZE","DESCRIPTION","DESIGNER ID","CATEGORY","DESIGNER","MATERIAL","COLOUR","TITLE", "ROW LABELS", "GRAND TOTAL"];
         
         const headerRowIndex = findHeaderRowIndex(worksheet, headerKeywords);
         if (headerRowIndex === -1) {
