@@ -47,30 +47,55 @@
         <main class="container mt-5 bg-light p-5 rounded">
             <h2 class="mb-4">Submit MSRP Task</h2>
             <form class="row g-3 needs-validation" id="msrpForm" enctype="multipart/form-data" method="POST" action="/submitMsrp" novalidate>
+
+                <div class="mb-3">
+                    <p class="card-text bg-light" style="transform: rotate(0);">
+    
+                    <a href="https://configurations-iconluxury.nyc3.cdn.digitaloceanspaces.com/templates/icon-distro-a-b-c-r.xlsx" class="text stretched-link">Download Template</a> 
+                
+                </p>
+                </div>
+
                 <div class="col-md-6">
-                    <label for="fileUploadMsrp" class="form-label">Upload Excel File</label>
-                    <input type="file" class="form-control" name="fileUploadMsrp" id="fileUploadMsrp" accept=".xlsx" required>
+                    <label for="fileUploadImage" class="form-label">Upload Excel File *</label>
+                    <input type="file" class="form-control" name="fileUploadImage" id="fileUploadImage" accept=".xlsx" required>
                     <div class="invalid-feedback">
                         Please upload an Excel file.
                     </div>
                 </div>
+            <div class="col-md-6"> 
+                <label for="sendToEmail" class="form-label">Email *</label>
+                <div class="input-group"> <!-- Adjusted from col-md-6 to col-md-4 for a smaller width -->
+                    <input type="text" class="form-control" id="sendToEmail" name="sendToEmail" placeholder="Recipient's email" aria-label="Recipient's email" aria-describedby="basic-addon2" required>
+                         
+                    <label class="input-group-text" for="inputGroupSelect02">@</label>
+                    <select class="form-select" id="inputGroupSelect02">
+                        <option selected>iconluxurygroup.com</option>
+                        <option value="1">luxurymarket.com</option>
+                
+                      </select>
+                    <div class="invalid-feedback">
+                        Please provide a valid email.
+                    </div>
+                  </div>
+                </div>
                 <div class="col-md-12">
                     <label for="searchColMsrp" class="form-label">SKU Column *</label>
-                    <input type="text" class="form-control" id="searchColMsrp" name="searchColMsrp" required>
+                    <input type="text" class="form-control" id="searchColMsrp" name="searchColMsrp" placeholder="B" required>
                     <div class="invalid-feedback">
                         Please provide a valid SKU column.
                     </div>
                 </div>
                 <div class="col-md-12">
                     <label for="brandColMsrp" class="form-label">Brand Column *</label>
-                    <input type="text" class="form-control" id="brandColMsrp" name="brandColMsrp" required>
+                    <input type="text" class="form-control" id="brandColMsrp" name="brandColMsrp" placeholder="C" required>
                     <div class="invalid-feedback">
                         Please provide a valid brand column.
                     </div>
                 </div>
                 <div class="col-md-12">
                     <label for="msrpColumnMsrp" class="form-label">MSRP Column *</label>
-                    <input type="text" class="form-control" id="msrpColumnMsrp" name="msrpColumnMsrp" required>
+                    <input type="text" class="form-control" id="msrpColumnMsrp" name="msrpColumnMsrp" placeholder="R" required>
                     <div class="invalid-feedback">
                         Please provide a valid MSRP column.
                     </div>
@@ -86,7 +111,7 @@
                         <label class="form-check-label" for="msrpOverwrite">Overwrite</label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpNewColumn" value="newColumn">
+                        <input class="form-check-input" type="radio" name="preferredMsrpMethod" id="msrpNewColumn" value="newColumn" checked>
                         <label class="form-check-label" for="msrpNewColumn">Make New Column (To the Left)</label>
                     </div>
                     <div class="invalid-feedback">

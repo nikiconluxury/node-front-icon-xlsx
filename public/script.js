@@ -1,6 +1,39 @@
 // Common functionalities
 document.addEventListener("DOMContentLoaded", function () {
-    // Sidebar toggle for mobile devices
+    const preloadCheckbox = document.querySelector('.form-check-input[type="checkbox"]');
+    const dropdown = document.getElementById('inputGroupSelect02');
+    const skuInput = document.getElementById('searchColImage');
+    const brandInput = document.getElementById('brandColImage');
+    const imageColumnInput = document.getElementById('imageColumnImage');
+
+    function updateInputs() {
+        const selectedOption = dropdown.value;
+        // Assuming the dropdown value is something like "B C A" and you want to split it to update the inputs
+        const [sku, brand, imageColumn] = selectedOption.split(' ');
+        skuInput.value = sku;
+        brandInput.value = brand;
+        imageColumnInput.value = imageColumn;
+    }
+
+    function clearInputs() {
+        skuInput.value = '';
+        brandInput.value = '';
+        imageColumnInput.value = '';
+    }
+
+    preloadCheckbox.addEventListener('change', function() {
+        if(this.checked) {
+            updateInputs();
+        } else {
+            clearInputs();
+        }
+    });
+
+    dropdown.addEventListener('change', function() {
+        if(preloadCheckbox.checked) {
+            updateInputs();
+        }
+    });// Sidebar toggle for mobile devices
     $('.navbar-toggler').click(function () {
         $('.sidebar').toggleClass('active');
         $('.content').toggleClass('active');
