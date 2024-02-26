@@ -40,7 +40,12 @@
     </header>
     <main class="container mt-5 bg-light p-5 rounded">
         <h2 class="mb-4">Tasks</h2>
-      
+        <style>
+            .disabled-link {
+              pointer-events: none;
+              opacity: 0.5;
+            }
+            </style>
             <div class="row g-4">
                 <!-- MSRP Card -->
                 <div class="col-md-6">
@@ -49,7 +54,7 @@
                         <div class="card-body">
                             <h5 class="card-title">MSRP Task</h5>
                             <p class="card-text">Details about the MSRP task...</p>
-                            <a href="msrp.html" class="btn btn-primary" disabled>Go to MSRP Task (coming soon)</a>
+                            <a href="msrp.html" class="btn btn-primary disabled-link">Go to MSRP Task (coming soon)</a>
                         </div>
                     </div>
                 </div>
