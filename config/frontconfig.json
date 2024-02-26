@@ -4,7 +4,7 @@
      "Style #",
         "Color Name",
         "TOT MSRP",
-        "TOT PRICE"
+        "TOT PRICE",
       "COLOR",
       "MSRP",
       "QTY",
@@ -22,7 +22,7 @@
       "COLOUR",
       "TITLE",
       "ROW LABELS",
-      "GRAND TOTAL",
+      "GRAND TOTAL"
     ]
   }
   
