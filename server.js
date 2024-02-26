@@ -198,7 +198,7 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
         console.log('File uploaded to S3 successfully:', fileUrl);
         // Attach common data fields to the aggregated row-specific data
         const packagedData = {
-            rowSpecificData,
+            rowData : rowSpecificData,
             preferredImageMethod: req.body.preferredImageMethod,
             filePath: fileUrl,
             sendToEmail: req.body.sendToEmail + "@" + req.body.inputGroupSelect03,
