@@ -38,7 +38,7 @@
                                     <a class="nav-link active" href="image.html">Image Task</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link " href="msrp.html">MSRP Task</a>
+                                    <a class="nav-link " href="msrp.html" >MSRP Task</a>
                                 </li>
                             </ul>
                         </div>
@@ -79,10 +79,10 @@
             <div class="input-group md-2 "> <!-- Adjusted from col-md-6 to col-md-4 for a smaller width -->
                 <input type="text" class="form-control" id="sendToEmail" name="sendToEmail" placeholder="Recipient's email" aria-label="Recipient's email" aria-describedby="basic-addon2" required>
                      
-                <label class="input-group-text" for="inputGroupSelect02">@</label>
-                <select class="form-select" id="inputGroupSelect02">
-                    <option selected>iconluxurygroup.com</option>
-                    <option value="1">luxurymarket.com</option>
+                <label class="input-group-text" for="inputGroupSelect03">@</label>
+                <select class="form-select" id="inputGroupSelect03" name="inputGroupSelect03">
+                    <option value="iconluxurygroup.com" selected>iconluxurygroup.com</option>
+                    <option value="luxurymarket.com">luxurymarket.com</option>
             
                   </select>
                 <div class="invalid-feedback">
@@ -159,6 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const skuInput = document.getElementById('searchColImage');
     const brandInput = document.getElementById('brandColImage');
     const imageColumnInput = document.getElementById('imageColumnImage');
+
 
     function updateInputs() {
         const selectedOption = dropdown.value;

@@ -144,16 +144,16 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
         const imageColIndex = columnLetterToIndex(req.body.imageColumnImage);
         const validationErrors = [];
 
-        let packagedData = []; // Prepare to package data
+        let rowSpecificData = []; // Prepare to package data specific to each row
 
-    for (let i = 0; i < data.length; i++) {
-        const row = data[i];
-        const absoluteRowIndex = i + headerRowIndex + 2; // Adjust for zero-based index and header row
+        for (let i = 0; i < data.length; i++) {
+            const row = data[i];
+            const absoluteRowIndex = i + headerRowIndex + 2; // Adjust for zero-based index and header row
         
         // Define these variables outside of the rowData object to use them in conditional checks
         const searchValue = row[searchColIndex];
         const brandValue = row[brandColIndex];
-        const msrpValue = row[imageColIndex];
+        const imageValue = row[imageColIndex];
 
         // Now use searchValue, brandValue, and msrpValue in your if conditions
         if (req.body.preferredImageMethod === 'append' && msrpValue !== undefined) {
@@ -171,29 +171,21 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
             validationErrors.push(`Row ${i + 1 + headerRowIndex}: Brand value length must be at least 3 characters.`);
         }
         
-        // Construct the rowData object using the variables defined above
+        // Construct row-specific data object
         const rowData = {
             absoluteRowIndex,
             searchValue,
             brandValue,
-            msrpValue,
-            preferredMsrpMethod: req.body.preferredMsrpMethod,
-            sendToEmail: req.body.sendToEmail,
-
-
+            imageValue,
         };
 
-        // For simplicity, we're packaging all rows directly
-        packagedData.push(rowData);
+        rowSpecificData.push(rowData);
     }
-        console.log('Packaged data:', packagedData);
+
 
         if (validationErrors.length > 0) {
             return res.status(400).json({ success: false, message: "Validation failed", errors: validationErrors });
         }
-        console.log('Packaged data:', packagedData);
-        console.log('Data packaged successfully:', packagedData.length, 'rows packaged.');
-
         // Upload the original file to S3
         const fileName = `${uuidv4().slice(0, 8)}-${req.file.originalname}`.replace(/\s/g, '');
         await s3Client.send(new PutObjectCommand({
@@ -204,7 +196,15 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
         }));
         const fileUrl = `${process.env.SPACES_ENDPOINT}/${process.env.SPACES_BUCKET_NAME}/${fileName}`;
         console.log('File uploaded to S3 successfully:', fileUrl);
+        // Attach common data fields to the aggregated row-specific data
+        const packagedData = {
+            rowSpecificData,
+            preferredImageMethod: req.body.preferredImageMethod,
+            filePath: fileUrl,
+            sendToEmail: req.body.sendToEmail + "@" + req.body.inputGroupSelect03,
+        };
 
+        console.log('Packaged data:', packagedData);
         // Attempt to send packaged data to another service
         const serviceResponse = await sendPackagedDataToService(packagedData);
         console.log(serviceResponse.message);
