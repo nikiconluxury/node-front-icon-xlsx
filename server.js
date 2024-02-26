@@ -129,7 +129,7 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
 
     
         const headerKeywords = await fetchHeaderKeywords(process.env.HEADERKEYWORDSURL);
-        console.log('headerKeywords:', headerKeywords);
+        
         
         const headerRowIndex = findHeaderRowIndex(worksheet, headerKeywords);
         console.log('Header row index:', headerRowIndex);
@@ -180,6 +180,7 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
         };
 
         rowSpecificData.push(rowData);
+        console.log('headerKeywords:', headerKeywords);
     }
 
 
