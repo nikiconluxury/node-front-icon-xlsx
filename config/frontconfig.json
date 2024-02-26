@@ -1,6 +1,10 @@
 {
     "headerKeywords": [
       "BRAND",
+     "Style #",
+        "Color Name",
+        "TOT MSRP",
+        "TOT PRICE"
       "COLOR",
       "MSRP",
       "QTY",
