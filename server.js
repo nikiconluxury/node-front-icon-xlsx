@@ -132,6 +132,7 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
         
         
         const headerRowIndex = findHeaderRowIndex(worksheet, headerKeywords);
+        console.log('Header Keywords:', headerKeywords);
         console.log('Header row index:', headerRowIndex);
         if (headerRowIndex === -1) {
             return res.status(400).json({ success: false, message: "Header row not found. Please ensure the Excel file is formatted correctly." });
@@ -199,17 +200,31 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
         console.log('File uploaded to S3 successfully:', fileUrl);
         // Attach common data fields to the aggregated row-specific data
         const packagedData = {
-            rowData : rowSpecificData,
+            rowData: rowSpecificData,
             preferredImageMethod: req.body.preferredImageMethod,
             filePath: fileUrl,
             sendToEmail: req.body.sendToEmail + "@" + req.body.inputGroupSelect03,
         };
-
+        
         console.log('Packaged data:', packagedData);
-        // Attempt to send packaged data to another service
-        const serviceResponse = await sendPackagedDataToService(packagedData);
-        console.log(serviceResponse.message);
-        res.json({ success: true, message: "File processed and uploaded successfully, data packaged for batch processing and sent.", fileUrl, serviceMessage: serviceResponse.message });
+        
+        try {
+            const serviceResponse = await sendPackagedDataToService(packagedData);
+            console.log(serviceResponse.message);
+            // Send a response back to the client indicating success
+            res.json({ success: true, message: "File processed and uploaded successfully, data packaged for batch processing and sent.", fileUrl, serviceMessage: serviceResponse.message });
+        } catch (error) {
+            console.error("Error during external service processing:", error);
+            // Check the type of error and respond accordingly
+            if (error.message === 'Failed to process data by the external service.') {
+                // Return a specific error message related to the external service failure
+                res.status(500).json({ success: false, message: "File processed and uploaded, but failed during external service processing.", error: error.message, fileUrl });
+            } else {
+                // Handle other unexpected errors
+                res.status(500).json({ success: false, message: "An unexpected error occurred.", error: error.toString() });
+            }
+        }
+        
     } catch (error) {
         // Check if the error is from sendPackagedDataToService
         if (error.message === 'Failed to process data by the external service.') {
@@ -285,7 +300,7 @@ app.post('/submitMsrp', upload.single('fileUploadMsrp'), async (req, res) => {
 
     
         const headerKeywords = await fetchHeaderKeywords(process.env.HEADERKEYWORDSURL);
-        console.log('headerKeywords:', headerKeywords);
+
         
         const headerRowIndex = findHeaderRowIndex(worksheet, headerKeywords);
         console.log('Header row index:', headerRowIndex);
@@ -375,21 +390,52 @@ app.post('/submitMsrp', upload.single('fileUploadMsrp'), async (req, res) => {
     }
 });
 // Simulates sending packaged data to another service
+// Define the URL to which you want to send the packaged data
+
 function sendPackagedDataToService(packagedData) {
     return new Promise((resolve, reject) => {
-        // Simulate a request to an external service
-        const isSuccess = Math.random() > 0; //0.5 =  50% chance of success
-
-        setTimeout(() => {
-            if (isSuccess) {
-                resolve({ success: true, message: "Data processed successfully by the external service." });
-            } else {
-                reject({ success: false, message: "Failed to process data by the external service." });
-            }
-        }, 1000); // Simulate async operation delay
-    });
-}
-
+        // Use fetch API to send data to the external service
+        fetch(process.env.MID_API_SERVICE_URL, {
+            method: 'POST', // or 'PUT'
+            headers: {
+                'accept': 'application/json',
+                'Content-Type': 'application/json',},
+                            body: JSON.stringify(packagedData),
+                        })
+                        .then(response => {
+                            // Check if the response status code is in the 200-299 range
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok. Status Code: ' + response.status);
+                            }
+                            return response.json(); // Parse JSON body of the response
+                        })
+                        .then(data => {
+                            // Check for success property in the response data
+                            if(data.success) {
+                                resolve({ 
+                                    success: true, 
+                                    message: "Data processed successfully by the external service.", 
+                                    statusCode: 200 // Assuming success corresponds to a 200 OK status
+                                });
+                            } else {
+                                reject({ 
+                                    success: false, 
+                                    message: "Failed to process data by the external service. The service responded with an error.", 
+                                    statusCode: 200 // This assumes that the service uses 200 OK for operational errors
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            // Handle network errors and other exceptions
+                            reject({ 
+                                success: false, 
+                                message: "Failed to process data by the external service.", 
+                                error: error.toString(),
+                                statusCode: error.response ? error.response.status : 'Network or other error' // Handle cases where the error might not have a response due to network failure
+                            });
+                        });
+                    });
+                }
 //BELOW WORKS FEB 22 10pm
 // app.post('/submitMsrp', upload.single('fileUploadMsrp'), async (req, res) => {
 //     try {
