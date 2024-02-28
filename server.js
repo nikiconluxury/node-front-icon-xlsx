@@ -164,12 +164,12 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
             continue; // Skip appending this row to packagedData if it's not missing MSRP
         }
         if (searchValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing search value.`);
-        else if (searchValue.length < 8) {
-            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Search value length must be at least 3 characters.`);
+        else if (searchValue.length < 5) {
+            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Search value length must be at least 5 characters.`);
         }
         if (brandValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing brand value.`);
-        else if (brandValue.length < 3) {
-            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Brand value length must be at least 3 characters.`);
+        else if (brandValue.length < 2) {
+            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Brand value length must be at least 2 characters.`);
         }
         
         // Construct row-specific data object
@@ -335,7 +335,7 @@ app.post('/submitMsrp', upload.single('fileUploadMsrp'), async (req, res) => {
         }
         if (searchValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing search value.`);
         else if (searchValue.length < 8) {
-            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Search value length must be at least 3 characters.`);
+            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Search value length must be at least 8 characters.`);
         }
         if (brandValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing brand value.`);
         else if (brandValue.length < 3) {
