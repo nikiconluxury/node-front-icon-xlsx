@@ -152,8 +152,8 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
             const absoluteRowIndex = i + headerRowIndex + 2; // Adjust for zero-based index and header row
         
         // Define these variables outside of the rowData object to use them in conditional checks
-        const searchValue = row[searchColIndex];
-        const brandValue = row[brandColIndex];
+        let searchValue = row[searchColIndex];
+        let brandValue = row[brandColIndex];
         const imageValue = row[imageColIndex];
 
         // Now use searchValue, brandValue, and msrpValue in your if conditions
@@ -172,7 +172,10 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
             validationErrors.push(`Row ${i + 1 + headerRowIndex}: Brand value length must be at least 2 characters.`);
         }
         
-        // Construct row-specific data object
+//convert search values to string
+        searchValue = String(searchValue)
+        brandValue = String(brandValue)
+//create data object
         const rowData = {
             absoluteRowIndex,
             searchValue,
