@@ -11,14 +11,14 @@
     <body>
 <!-- Toast Notification Container -->
 <div aria-live="polite" aria-atomic="true" class="position-relative">
-    <div class="toast-container top-0 end-0 p-3" id="imageToastContainer">
+    <div class="toast-container top-0 end-0 p-3" id="imageToastContainer3">
       <!-- Toasts will be dynamically inserted here -->
     </div>
   </div>
 
         <main class="container mt-5 bg-light p-5 rounded">
         <h2 class="mb-4">Submit Image Task</h2>
-        <form class="row g-3 needs-validation" id="imageForm" enctype="multipart/form-data" method="POST" action="/submitImage" novalidate>
+        <form class="row g-3 needs-validation" id="imageForm3" enctype="multipart/form-data" method="POST" action="/submitImage" novalidate>
             <div class="mb-3">
                 <p class="card-text bg-light" style="transform: rotate(0);">
 
@@ -101,14 +101,13 @@
                 </div>
             </div>
             <div class="col-12">                
-                <button id="imageSubmitBtn" class="btn btn-primary" type="submit">Submit form</button>
+                <button id="imageSubmitBtn2" class="btn btn-primary" type="submit">Submit form</button>
             </div>
             
         </form>
         
     
         </main>
-        
 <script>
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -148,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-    handleSubmit('imageForm', 'imageSubmitBtn', '/submitImage', 'imageToastContainer');
+    handleSubmit('imageForm3', 'imageSubmitBtn2', '/submitImage', 'imageToastContainer3');
 });
 </script>
 
