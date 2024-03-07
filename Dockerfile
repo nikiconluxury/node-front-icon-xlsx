@@ -13,7 +13,6 @@ COPY package*.json ./
 # Install production dependencies.
 # Consider using `npm ci` which is more suitable for production builds as it installs directly from package-lock.json
 RUN npm ci --only=production
-
 # Copy local code to the container image.
 COPY . .
 
@@ -21,4 +20,4 @@ COPY . .
 EXPOSE 3000
 
 # Run the web service on container startup.
-CMD [ "node", "server.js" ]
+CMD [ "node","--max-old-space-size=4096", "server.js" ]
