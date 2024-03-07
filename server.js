@@ -215,7 +215,7 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
             const serviceResponse = await sendPackagedDataToService(packagedData);
             console.log(serviceResponse.message);
             // Send a response back to the client indicating success
-            res.json({ success: true, message: "File processed and uploaded successfully, data packaged for batch processing and sent.", fileUrl, serviceMessage: serviceResponse.message });
+            res.json({ success: true, message: "File read and upload successful, Packaged rows for batch processing, Submit successful", fileUrl, serviceMessage: serviceResponse.message });
         } catch (error) {
             console.error("Error during external service processing:", error);
             // Check the type of error and respond accordingly
