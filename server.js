@@ -378,7 +378,7 @@ app.post('/submitMsrp', upload.single('fileUploadMsrp'), async (req, res) => {
         // Attempt to send packaged data to another service
         const serviceResponse = await sendPackagedDataToService(packagedData);
         console.log(serviceResponse.message);
-        res.json({ success: true, message: "File processed and uploaded successfully, data packaged for batch processing and sent.", fileUrl, serviceMessage: serviceResponse.message });
+        res.json({ success: true, message: "File read & submit batch process success", fileUrl, serviceMessage: serviceResponse.message });
     } catch (error) {
         // Check if the error is from sendPackagedDataToService
         if (error.message === 'Failed to process data by the external service.') {
@@ -412,22 +412,38 @@ function sendPackagedDataToService(packagedData) {
                             }
                             return response.json(); // Parse JSON body of the response
                         })
+                        // .then(data => {
+                        //     // Check for success property in the response data
+                        //     if(data.success) {
+                        //         resolve({ 
+                        //             success: true, 
+                        //             message: "Data processed successfully by the external service.", 
+                        //             statusCode: 200 // Assuming success corresponds to a 200 OK status
+                        //         });
+                        //     } else {
+                        //         reject({ 
+                        //             success: false, 
+                        //             message: "Failed to process data by the external service. The service responded with an error.", 
+                        //             statusCode: 200 // This assumes that the service uses 200 OK for operational errors
+                        //         });
+                        //     }
+                        // })
                         .then(data => {
-                            // Check for success property in the response data
-                            if(data.success) {
+                            // Assuming the service sends back a success message as part of the data
+                            if(data.message && data.message.includes("Processing started successfully")) {
                                 resolve({ 
                                     success: true, 
                                     message: "Data processed successfully by the external service.", 
-                                    statusCode: 200 // Assuming success corresponds to a 200 OK status
+                                    statusCode: 200 // Assuming this corresponds to a 200 OK status
                                 });
                             } else {
                                 reject({ 
                                     success: false, 
-                                    message: "Failed to process data by the external service. The service responded with an error.", 
-                                    statusCode: 200 // This assumes that the service uses 200 OK for operational errors
+                                    message: "The service responded, but the data processing did not start successfully.", 
+                                    statusCode: 200 // Adjust based on actual service behavior
                                 });
                             }
-                        })
+                        })                        
                         .catch((error) => {
                             // Handle network errors and other exceptions
                             reject({ 
