@@ -184,7 +184,6 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
         };
 
         rowSpecificData.push(rowData);
-        console.log('headerKeywords:', headerKeywords);
     }
 
 
@@ -209,7 +208,7 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
             sendToEmail: req.body.sendToEmail + "@" + req.body.inputGroupSelect03,
         };
         
-        console.log('Packaged data:', packagedData);
+        //console.log('Packaged data:', packagedData);
         
         try {
             const serviceResponse = await sendPackagedDataToService(packagedData);
