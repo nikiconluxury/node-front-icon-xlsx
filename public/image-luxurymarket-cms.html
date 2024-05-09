@@ -16,7 +16,7 @@
     </div>
   </div>
 
-        <main class="container mt-5 bg-light p-5 rounded">
+        <main class="container mt-5 bg-white p-5 rounded">
         <!--<h2 class="mb-4">Submit Image Task</h2>-->
         <form class="row g-3 needs-validation" id="imageForm3" enctype="multipart/form-data" method="POST" action="/submitImage" novalidate>
            <!-- <div class="mb-3">
@@ -33,11 +33,11 @@
                   <input class="form-check-input mt-0" type="checkbox" value="" aria-label="Checkbox for following text input" name="fileUploadImage" id="fileUploadImage" accept=".xlsx">
                 </div>
                 <select class="form-select" id="inputGroupSelect02">
-                    <option selected>B C A</option>
-                  </select>
+                    <option selected>A B C</option>
+                </select>
               </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-9">
                 <label for="fileUploadImage" class="form-label">Upload Excel File *</label>
                 <input type="file" class="form-control" name="fileUploadImage" id="fileUploadImage" accept=".xlsx" required>
                 <div class="invalid-feedback">
@@ -60,12 +60,18 @@
                 </div>
               </div>
             </div>-->
-
             <div class="col-md-12">
-                <label for="searchColImage" class="form-label">SKU Column *</label>
+                <label for="imageColumnImage" class="form-label">Image Column *</label>
+                <input type="text" class="form-control" id="imageColumnImage" name="imageColumnImage" placeholder="" required>
+                <div class="invalid-feedback">
+                    Please provide a valid image column.
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="searchColImage" class="form-label">Style Column *</label>
                 <input type="text" class="form-control" id="searchColImage" name="searchColImage" placeholder="" required>
                 <div class="invalid-feedback">
-                    Please provide a valid SKU column.
+                    Please provide a valid Style column.
                 </div>
             </div>
             <div class="col-md-12">
@@ -76,10 +82,17 @@
                 </div>
             </div>
             <div class="col-md-12">
-                <label for="imageColumnImage" class="form-label">Image Column *</label>
-                <input type="text" class="form-control" id="imageColumnImage" name="imageColumnImage" placeholder="A" required>
+                <label for="ColorColImage" class="form-label">Color Column</label>
+                <input type="text" class="form-control" id="ColorColImage" name="ColorColImage" placeholder="">
                 <div class="invalid-feedback">
-                    Please provide a valid image column.
+                    Please provide a valid Color column.
+                </div>
+            </div>
+            <div class="col-md-12">
+                <label for="CategoryColImage" class="form-label">Category Column</label>
+                <input type="text" class="form-control" id="CategoryColImage" name="CategoryColImage" placeholder="">
+                <div class="invalid-feedback">
+                    Please provide a valid Category column.
                 </div>
             </div>
            <!-- <div class="col-md-12">
@@ -117,23 +130,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const skuInput = document.getElementById('searchColImage');
     const brandInput = document.getElementById('brandColImage');
     const imageColumnInput = document.getElementById('imageColumnImage');
-
-
+    const colorInput = document.getElementById('ColorColImage');
+    const categoryInput = document.getElementById('CategoryColImage');
     function updateInputs() {
         const selectedOption = dropdown.value;
-        // Assuming the dropdown value is something like "B C A" and you want to split it to update the inputs
-        const [sku, brand, imageColumn] = selectedOption.split(' ');
-        skuInput.value = sku;
-        brandInput.value = brand;
+        const [imageColumn, sku, brand] = selectedOption.split(' ');
         imageColumnInput.value = imageColumn;
+        searchColImage.value = sku;
+        brandColImage.value = brand;
     }
 
     function clearInputs() {
+        imageColumnInput.value = '';
         skuInput.value = '';
         brandInput.value = '';
-        imageColumnInput.value = '';
+        colorInput.value = '';
+        categoryInput.value = '';
+        
     }
-
     preloadCheckbox.addEventListener('change', function() {
         if(this.checked) {
             updateInputs();

@@ -5,20 +5,24 @@ document.addEventListener("DOMContentLoaded", function () {
     const skuInput = document.getElementById('searchColImage');
     const brandInput = document.getElementById('brandColImage');
     const imageColumnInput = document.getElementById('imageColumnImage');
+    const colorInput = document.getElementById('ColorColImage');
+    const categoryInput = document.getElementById('CategoryColImage');
 
     function updateInputs() {
         const selectedOption = dropdown.value;
-        // Assuming the dropdown value is something like "B C A" and you want to split it to update the inputs
-        const [sku, brand, imageColumn] = selectedOption.split(' ');
-        skuInput.value = sku;
-        brandInput.value = brand;
+        const [imageColumn, sku, brand] = selectedOption.split(' ');
         imageColumnInput.value = imageColumn;
+        searchColImage.value = sku;
+        brandColImage.value = brand;
     }
 
     function clearInputs() {
+        imageColumnInput.value = '';
         skuInput.value = '';
         brandInput.value = '';
-        imageColumnInput.value = '';
+        colorInput.value = '';
+        categoryInput.value = '';
+        
     }
 
     preloadCheckbox.addEventListener('change', function() {

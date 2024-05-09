@@ -143,6 +143,8 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
         const searchColIndex = columnLetterToIndex(req.body.searchColImage);
         const brandColIndex = columnLetterToIndex(req.body.brandColImage);
         const imageColIndex = columnLetterToIndex(req.body.imageColumnImage);
+        const colorColIndex = columnLetterToIndex(req.body.ColorColImage);
+        const CategoryColIndex = columnLetterToIndex(req.body.CategoryColImage);
         const validationErrors = [];
 
         let rowSpecificData = []; // Prepare to package data specific to each row
@@ -154,6 +156,8 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
         // Define these variables outside of the rowData object to use them in conditional checks
         let searchValue = row[searchColIndex];
         let brandValue = row[brandColIndex];
+        let colorValue = row[colorColIndex];
+        let CategoryValue = row[CategoryColIndex];
         const imageValue = row[imageColIndex];
 
         // Now use searchValue, brandValue, and msrpValue in your if conditions
@@ -175,11 +179,15 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
 //convert search values to string
         searchValue = String(searchValue)
         brandValue = String(brandValue)
+        colorValue = String(colorValue)
+        CategoryValue = String(CategoryValue)
 //create data object
         const rowData = {
             absoluteRowIndex,
             searchValue,
             brandValue,
+            colorValue,
+            CategoryValue,
             imageValue,
         };
 
@@ -208,7 +216,7 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
             sendToEmail: req.body.sendToEmail + "@" + req.body.inputGroupSelect03,
         };
         
-        //console.log('Packaged data:', packagedData);
+        console.log('Packaged data:', packagedData);
         
         try {
             const serviceResponse = await sendPackagedDataToService(packagedData);
@@ -241,39 +249,6 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
     }
 });
 
-//app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
-//    try {
-//        console.log('Processing image submission...');
-//        console.log('Payload Received:', req.file); // Logs the payload details
-//        const fileBuffer = req.file.buffer;
-//
-//
-//
-//
-//
-//
-//        // Implement your validation logic here
-//        // For example, check if certain sheets exist or certain values are valid
-//        const isValid = false; // Placeholder validation result
-//
-//
-//
-//
-//
-//        if (isValid) {
-//            const fileName = `${uuidv4()}-${req.file.originalname}`;
-//            await uploadFileToSpaces(fileBuffer, fileName); // Upload original file to S3
-//
-//            console.log('File uploaded to S3 successfully.');
-//            res.json({ success: true, message: "File processed and uploaded successfully." });
-//        } else {
-//            res.status(400).json({ success: false, message: "File validation failed." });
-//        }
-//    } catch (error) {
-//        console.error("Error during file submission:", error);
-//        res.status(500).json({ success: false, message: "An unexpected error occurred.", error: error.toString() });
-//    }
-//});
 
 
 app.post('/submitMsrp', upload.single('fileUploadMsrp'), async (req, res) => {
