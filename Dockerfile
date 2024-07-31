@@ -17,7 +17,7 @@ RUN npm ci --only=production
 COPY . .
 
 # Expose the port your app runs on
-EXPOSE 3000
+EXPOSE 3001
 
 # Run the web service on container startup.
 CMD [ "node","--max-old-space-size=4096", "server.js" ]

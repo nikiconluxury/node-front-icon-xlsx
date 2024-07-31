@@ -168,8 +168,8 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
             continue; // Skip appending this row to packagedData if it's not missing MSRP
         }
         if (searchValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing search value.`);
-        else if (searchValue.length < 5) {
-            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Search value length must be at least 5 characters.`);
+        else if (searchValue.length < 2) {
+            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Search value length must be at least 2 characters.`);
         }
         if (brandValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing brand value.`);
         else if (brandValue.length < 2) {
@@ -505,5 +505,5 @@ function sendPackagedDataToService(packagedData) {
  
 
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Server running on port ${port}`));
