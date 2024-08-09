@@ -27,11 +27,11 @@
       "TITLE",
       "ROW LABELS",
       "GRAND TOTAL",
-        "img",
+        "imgs",
 "Item Decription",
         "TTL Qty",
         "Gender",
-        "Department",
+        "Department"
     ]
   }
   
