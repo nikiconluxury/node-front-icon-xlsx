@@ -26,7 +26,12 @@
       "COLOUR",
       "TITLE",
       "ROW LABELS",
-      "GRAND TOTAL"
+      "GRAND TOTAL",
+        "img",
+"Item Decription",
+        "TTL Qty",
+        "Gender",
+        "Department",
     ]
   }
   
