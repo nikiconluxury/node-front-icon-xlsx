@@ -130,7 +130,7 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
     
         const headerKeywords = await fetchHeaderKeywords(process.env.HEADERKEYWORDSURL);
         
-        console.log(headerKeywords)
+        
         const headerRowIndex = findHeaderRowIndex(worksheet, headerKeywords);
         console.log('Header Keywords:', headerKeywords);
         console.log('Header row index:', headerRowIndex);
@@ -213,7 +213,7 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
             rowData: rowSpecificData,
             preferredImageMethod: req.body.preferredImageMethod,
             filePath: fileUrl,
-            sendToEmail: req.body.sendToEmail,
+            sendToEmail: req.body.sendToEmail + "@" + req.body.inputGroupSelect03,
         };
         
         console.log('Packaged data:', packagedData);
@@ -251,128 +251,127 @@ app.post('/submitImage', upload.single('fileUploadImage'), async (req, res) => {
 
 
 
-// app.post('/submitMsrp', upload.single('fileUploadMsrp'), async (req, res) => {
-//     let fileUrl = ''; // Initialize outside the try block
-//     console.log(`fileUrl initialized: ${fileUrl}`);
-//     try {
-//         console.log('Processing MSRP submission...');
-//         if (!req.file) {
-//             console.log({ success: false, message: "No file uploaded." });
-//             return res.status(400).json({ success: false, message: "No file uploaded." });
+app.post('/submitMsrp', upload.single('fileUploadMsrp'), async (req, res) => {
+    let fileUrl = ''; // Initialize outside the try block
+    console.log(`fileUrl initialized: ${fileUrl}`);
+    try {
+        console.log('Processing MSRP submission...');
+        if (!req.file) {
+            console.log({ success: false, message: "No file uploaded." });
+            return res.status(400).json({ success: false, message: "No file uploaded." });
            
-//         }
+        }
 
-//         const fileBuffer = req.file.buffer;
-//         const workbook = XLSX.read(fileBuffer, { type: 'buffer' ,WTF: true});
+        const fileBuffer = req.file.buffer;
+        const workbook = XLSX.read(fileBuffer, { type: 'buffer' ,WTF: true});
         
 
-//         if (workbook.SheetNames.length > 1) {
-//             return res.status(400).json({ success: false, message: "Please ensure the Excel file contains only one sheet and re-upload." });
-//         }
-//         console.log('workbook.SheetNames.length:', workbook.SheetNames.length);
-//         const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        if (workbook.SheetNames.length > 1) {
+            return res.status(400).json({ success: false, message: "Please ensure the Excel file contains only one sheet and re-upload." });
+        }
+        console.log('workbook.SheetNames.length:', workbook.SheetNames.length);
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
 
-//         const range = XLSX.utils.decode_range(worksheet['!ref']);
-//         console.log("Range:", range.s.r, range.e.r, range.s.c, range.e.c);
+        const range = XLSX.utils.decode_range(worksheet['!ref']);
+        console.log("Range:", range.s.r, range.e.r, range.s.c, range.e.c);
 
     
-//         const headerKeywords = await fetchHeaderKeywords(process.env.HEADERKEYWORDSURL);
+        const headerKeywords = await fetchHeaderKeywords(process.env.HEADERKEYWORDSURL);
 
         
-//         const headerRowIndex = findHeaderRowIndex(worksheet, headerKeywords);
-//         console.log('Header row index:', headerRowIndex);
-//         if (headerRowIndex === -1) {
-//             return res.status(400).json({ success: false, message: "Header row not found. Please ensure the Excel file is formatted correctly." });
-//         }
+        const headerRowIndex = findHeaderRowIndex(worksheet, headerKeywords);
+        console.log('Header row index:', headerRowIndex);
+        if (headerRowIndex === -1) {
+            return res.status(400).json({ success: false, message: "Header row not found. Please ensure the Excel file is formatted correctly." });
+        }
 
-//         //const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, range: headerRowIndex + 1});//+1 to skip header row
-//         const data = XLSX.utils.sheet_to_json(worksheet, {header: 1, blankrows : true , defval: "" ,range: headerRowIndex + 1});
-//         const searchColIndex = columnLetterToIndex(req.body.searchColMsrp);
-//         const brandColIndex = columnLetterToIndex(req.body.brandColMsrp);
-//         const msrpColIndex = columnLetterToIndex(req.body.msrpColumnMsrp);
-//         const validationErrors = [];
+        //const data = XLSX.utils.sheet_to_json(worksheet, { header: 1, range: headerRowIndex + 1});//+1 to skip header row
+        const data = XLSX.utils.sheet_to_json(worksheet, {header: 1, blankrows : true , defval: "" ,range: headerRowIndex + 1});
+        const searchColIndex = columnLetterToIndex(req.body.searchColMsrp);
+        const brandColIndex = columnLetterToIndex(req.body.brandColMsrp);
+        const msrpColIndex = columnLetterToIndex(req.body.msrpColumnMsrp);
+        const validationErrors = [];
 
-//         let packagedData = []; // Prepare to package data
+        let packagedData = []; // Prepare to package data
 
-//     for (let i = 0; i < data.length; i++) {
-//         const row = data[i];
-//         const absoluteRowIndex = i + headerRowIndex + 2; // Adjust for zero-based index and header row
+    for (let i = 0; i < data.length; i++) {
+        const row = data[i];
+        const absoluteRowIndex = i + headerRowIndex + 2; // Adjust for zero-based index and header row
         
-//         // Define these variables outside of the rowData object to use them in conditional checks
-//         const searchValue = row[searchColIndex];
-//         const brandValue = row[brandColIndex];
-//         const msrpValue = row[msrpColIndex];
+        // Define these variables outside of the rowData object to use them in conditional checks
+        const searchValue = row[searchColIndex];
+        const brandValue = row[brandColIndex];
+        const msrpValue = row[msrpColIndex];
 
-//         // Now use searchValue, brandValue, and msrpValue in your if conditions
-//         if (req.body.preferredMsrpMethod === 'append' && msrpValue !== undefined) {
-//             if (searchValue === undefined || brandValue === undefined) {
-//                 validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing brand or search value where MSRP is intended to be appended.`);
-//             }
-//             continue; // Skip appending this row to packagedData if it's not missing MSRP
-//         }
-//         if (searchValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing search value.`);
-//         else if (searchValue.length < 8) {
-//             validationErrors.push(`Row ${i + 1 + headerRowIndex}: Search value length must be at least 8 characters.`);
-//         }
-//         if (brandValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing brand value.`);
-//         else if (brandValue.length < 3) {
-//             validationErrors.push(`Row ${i + 1 + headerRowIndex}: Brand value length must be at least 3 characters.`);
-//         }
+        // Now use searchValue, brandValue, and msrpValue in your if conditions
+        if (req.body.preferredMsrpMethod === 'append' && msrpValue !== undefined) {
+            if (searchValue === undefined || brandValue === undefined) {
+                validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing brand or search value where MSRP is intended to be appended.`);
+            }
+            continue; // Skip appending this row to packagedData if it's not missing MSRP
+        }
+        if (searchValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing search value.`);
+        else if (searchValue.length < 8) {
+            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Search value length must be at least 8 characters.`);
+        }
+        if (brandValue === undefined) validationErrors.push(`Row ${i + 1 + headerRowIndex}: Missing brand value.`);
+        else if (brandValue.length < 3) {
+            validationErrors.push(`Row ${i + 1 + headerRowIndex}: Brand value length must be at least 3 characters.`);
+        }
         
-//         // Construct the rowData object using the variables defined above
-//         const rowData = {
-//             absoluteRowIndex,
-//             searchValue,
-//             brandValue,
-//             msrpValue,
-//         };
+        // Construct the rowData object using the variables defined above
+        const rowData = {
+            absoluteRowIndex,
+            searchValue,
+            brandValue,
+            msrpValue,
+        };
 
-//         // For simplicity, we're packaging all rows directly
-//         packagedData.push(rowData);
-//     }
+        // For simplicity, we're packaging all rows directly
+        packagedData.push(rowData);
+    }
 
 
-//         if (validationErrors.length > 0) {
-//             return res.status(400).json({ success: false, message: "Validation failed", errors: validationErrors });
-//         }
-//         console.log('Packaged data:', packagedData);
-//         console.log('Data packaged successfully:', packagedData.length, 'rows packaged.');
+        if (validationErrors.length > 0) {
+            return res.status(400).json({ success: false, message: "Validation failed", errors: validationErrors });
+        }
+        console.log('Packaged data:', packagedData);
+        console.log('Data packaged successfully:', packagedData.length, 'rows packaged.');
 
-//         // Upload the original file to S3
-//         const fileName = `${uuidv4().slice(0, 8)}-${req.file.originalname}`.replace(/\s/g, '');
-//         await s3Client.send(new PutObjectCommand({
-//             Bucket: process.env.SPACES_BUCKET_NAME,
-//             Key: fileName,
-//             Body: fileBuffer,
-//             ACL: 'public-read',
-//         }));
-//         const fileUrl = `${process.env.SPACES_ENDPOINT}/${process.env.SPACES_BUCKET_NAME}/${fileName}`;
-//         console.log('File uploaded to S3 successfully:', fileUrl);
+        // Upload the original file to S3
+        const fileName = `${uuidv4().slice(0, 8)}-${req.file.originalname}`.replace(/\s/g, '');
+        await s3Client.send(new PutObjectCommand({
+            Bucket: process.env.SPACES_BUCKET_NAME,
+            Key: fileName,
+            Body: fileBuffer,
+            ACL: 'public-read',
+        }));
+        const fileUrl = `${process.env.SPACES_ENDPOINT}/${process.env.SPACES_BUCKET_NAME}/${fileName}`;
+        console.log('File uploaded to S3 successfully:', fileUrl);
 
-//         // Attempt to send packaged data to another service
-//         const serviceResponse = await sendPackagedDataToService(packagedData);
-//         console.log(serviceResponse.message);
-//         res.json({ success: true, message: "File read & submit batch process success", fileUrl, serviceMessage: serviceResponse.message });
-//     } catch (error) {
-//         // Check if the error is from sendPackagedDataToService
-//         if (error.message === 'Failed to process data by the external service.') {
-//             console.error("Error during external service processing:", error.message);
-//             // Return a more specific error message related to the external service failure
-//             return res.status(500).json({ success: false, message: "File processed and uploaded, but failed during external service processing.", error: error.message, fileUrl });
-//         } else {
-//             // Handle other errors that might have occurred during request processing
-//             console.error("Error during MSRP submission:", error);
-//             res.status(500).json({ success: false, message: "An unexpected error occurred.", error: error.toString() });
-//         }
-//     }
-// });
+        // Attempt to send packaged data to another service
+        const serviceResponse = await sendPackagedDataToService(packagedData);
+        console.log(serviceResponse.message);
+        res.json({ success: true, message: "File read & submit batch process success", fileUrl, serviceMessage: serviceResponse.message });
+    } catch (error) {
+        // Check if the error is from sendPackagedDataToService
+        if (error.message === 'Failed to process data by the external service.') {
+            console.error("Error during external service processing:", error.message);
+            // Return a more specific error message related to the external service failure
+            return res.status(500).json({ success: false, message: "File processed and uploaded, but failed during external service processing.", error: error.message, fileUrl });
+        } else {
+            // Handle other errors that might have occurred during request processing
+            console.error("Error during MSRP submission:", error);
+            res.status(500).json({ success: false, message: "An unexpected error occurred.", error: error.toString() });
+        }
+    }
+});
 // Simulates sending packaged data to another service
 // Define the URL to which you want to send the packaged data
 
 function sendPackagedDataToService(packagedData) {
     return new Promise((resolve, reject) => {
         // Use fetch API to send data to the external service
-        console.log(packagedData)
         fetch(process.env.MID_API_SERVICE_URL, {
             method: 'POST', // or 'PUT'
             headers: {
