@@ -19,5 +19,7 @@ COPY . .
 # Expose the port your app runs on
 EXPOSE 3001
 
+#https://image-backend-cms-icon-7.popovtech.com/process-image-batch/
+
 # Run the web service on container startup.
 CMD [ "node","--max-old-space-size=4096", "server.js" ]
